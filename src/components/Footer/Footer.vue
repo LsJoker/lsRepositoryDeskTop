@@ -1,5 +1,36 @@
 <template>
-  <div id="footer" class="align-center space-between"></div>
+  <div id="footer" class="align-center space-between">
+    <div class="songInfo flex">
+      <div class="icon align-center">
+        <img
+          src="../../assets/logo.png"
+          width="40"
+          height="40"
+          alt=""
+          srcset=""
+        />
+      </div>
+      <div class="flex-column" style="padding:0 10px;">
+        <div class="name">
+          <span>TestName</span> &nbsp;<span>-</span>&nbsp; <span>A artist</span>
+        </div>
+        <div class="func flex">
+          <span class="love">L</span> <span class="download">D</span>
+          <span class="more">M</span>
+        </div>
+      </div>
+    </div>
+    <div class="control space-between align-center">
+      <div class="prevWrapper center"><span class="prevBtn"></span></div>
+      <div class="playWrapper center"><span class="playBtn"></span></div>
+      <div class="nextWrapper center"><span class="nextBtn"></span></div>
+    </div>
+    <div class="setting justify-right">
+      <div class="duration"><span>00:59 / 03:45</span></div>
+      <div class="lyric"><span>Lyric</span></div>
+      <div class="playList"><span>SongList</span></div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -10,11 +41,87 @@ export default {
 </script>
 
 <style lang="scss">
-$activeColor: rgb(0, 255, 213);
 #footer {
   flex: 0 0 50px;
   padding: 0 10px;
-  background-color: #eee;
-  color: #fff;
+  background-color: #ddd;
+  color: #333;
+  .songInfo {
+    flex: 1 0 200px;
+  }
+  .control {
+    flex: 0 0 150px;
+    .prevWrapper,
+    .playWrapper,
+    .nextWrapper {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #ccc;
+      cursor: pointer;
+      &:hover {
+        background-color: #bbb;
+      }
+    }
+    .playWrapper {
+      width: 40px;
+      height: 40px;
+      &:hover {
+        .playBtn {
+          border-style: double;
+          border-width: 0 0 0 14px;
+        }
+      }
+      .playBtn {
+        height: 18px;
+        border-style: solid;
+        border-width: 10px 0 10px 14px;
+        border-color: transparent transparent transparent #111;
+        transition: all 0.3s ease;
+      }
+      .pauseBtn {
+        height: 18px;
+        border-style: solid;
+        border-width: 0 0 0 14px;
+        border-color: transparent transparent transparent #111;
+        transition: all 0.3s ease;
+      }
+    }
+    .prevBtn,
+    .nextBtn {
+      width: 0;
+      height: 0;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+    }
+    .prevBtn {
+      margin-left: -14px;
+      border-left: 10px solid transparent;
+      border-right: 10px solid #111;
+    }
+    .nextBtn {
+      margin-left: 14px;
+      border-left: 10px solid #111;
+      border-right: 10px solid transparent;
+    }
+  }
+  .setting {
+    flex: 1 0 200px;
+    .duration,
+    .lyric,
+    .playList {
+      padding: 4px;
+      margin: 0 4px;
+    }
+    .lyric,
+    .playList {
+      cursor: pointer;
+    }
+  }
+  .func {
+    span {
+      padding: 0 3px;
+    }
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div id="header" class="align-center drag space-between">
-    <div class="header-l flex">TestDemo</div>
+    <div class="header-l flex"><span class="logo">CloudMusic</span></div>
     <div class="header-r flex no-drag">
       <div class="minWrapper align-center" @click="minWindow">
         <span class="appHide"></span>
@@ -41,6 +41,9 @@ $activeColor: rgb(0, 255, 213);
   // background-color: #c62f2f;
   background-color: #444;
   color: #fff;
+  .logo {
+    font-size: 16px;
+  }
 }
 .minWrapper {
   min-width: 26px;
