@@ -1,8 +1,8 @@
 "use strict";
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
-  createProtocol,
-  installVueDevtools
+  createProtocol
+  //installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -16,7 +16,7 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     title: "CloudMusic",
-    minWidth: 1000,
+    minWidth: 1600,
     minHeight: 670,
     width: 1000,
     height: 670,

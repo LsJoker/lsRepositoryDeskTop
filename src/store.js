@@ -9,8 +9,13 @@ export default new Vuex.Store({
       play: false,
       url: "",
       img: ""
+    },
+    userPlayList: {}
+  },
+  mutations: {
+    SAVE_userPlayList(state, userPlayList) {
+      state.userPlayList = userPlayList;
     }
   },
-  mutations: {},
   actions: {}
 });

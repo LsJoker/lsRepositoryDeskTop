@@ -1,8 +1,10 @@
-import axios from 'axios';
+import axios from "axios";
 
-let baseUrl = 'https://api.bzqll.com/music/';
-let platKinds = 'netease';
+let baseUrl = "https://bighua.wang:3000";
 
 export const getMusicListJson = params => {
-  return axios.get(`${baseUrl}${platKinds}/songList?key=579621905&id=3778678&limit=10&offset=0`,{params});
+  return axios.get(`${baseUrl}/user/playlist`, { params });
+};
+export const getMusicListDetailJson = params => {
+  return axios.get(`${baseUrl}/playlist/detail`, { params });
 };

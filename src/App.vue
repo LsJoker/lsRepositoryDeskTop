@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <my-header></my-header>
+    <left-menu>123</left-menu>
     <main id="main"><router-view /></main>
     <my-footer></my-footer>
   </div>
@@ -9,11 +10,27 @@
 <script>
 import MyHeader from "./components/Header/Header";
 import MyFooter from "./components/Footer/Footer";
+import leftMenu from "./components/LeftMenu/LeftMenu";
+import { getMusicListJson } from "./musicApi.js";
+import { mapMutations } from "vuex";
+
 export default {
   name: "App",
   components: {
     MyHeader,
-    MyFooter
+    MyFooter,
+    leftMenu
+  },
+  methods: {
+    ...mapMutations(["SAVE_userPlayList"])
+  },
+  mounted() {
+    getMusicListJson({ uid: "337584617" }).then(res => {
+      let $this = this;
+      if (res.data.code === 200) {
+        $this.SAVE_userPlayList(res.data.playlist);
+      }
+    });
   }
 };
 </script>
@@ -27,6 +44,25 @@ export default {
   &::after {
     box-sizing: inherit;
   }
+}
+::-webkit-scrollbar-track-piece {
+  //滚动条凹槽的颜色，还可以设置边框属性
+  background-color: #191b1f;
+}
+::-webkit-scrollbar {
+  //滚动条的宽度
+  width: 6px;
+  height: 9px;
+}
+::-webkit-scrollbar-thumb {
+  //滚动条的设置
+  background-color: #2f3134;
+  background-clip: padding-box;
+  min-height: 28px;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #bbb;
 }
 .drag {
   -webkit-app-region: drag;

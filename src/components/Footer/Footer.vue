@@ -1,9 +1,27 @@
 <template>
   <div id="footer" class="align-center space-between">
     <div class="control space-between align-center">
-      <div class="prevWrapper center animated" :class="{ pulse: isPrevSong}" @click="prevSong"><span class="prevBtn"></span></div>
-      <div class="playWrapper center animated" :class="{ pulse: isPlayOrPause}" @click="playOrPause"><span class="playBtn"></span></div>
-      <div class="nextWrapper center animated" :class="{ pulse: isNextSong}" @click="nextSong"><span class="nextBtn"></span></div>
+      <div
+        class="prevWrapper center animated"
+        :class="{ pulse: isPrevSong }"
+        @click="prevSong"
+      >
+        <span class="prevBtn"></span>
+      </div>
+      <div
+        class="playWrapper center animated"
+        :class="{ pulse: isPlayOrPause }"
+        @click="playOrPause"
+      >
+        <span class="playBtn"></span>
+      </div>
+      <div
+        class="nextWrapper center animated"
+        :class="{ pulse: isNextSong }"
+        @click="nextSong"
+      >
+        <span class="nextBtn"></span>
+      </div>
     </div>
     <div class="songInfo flex">
       <div class="icon align-center">
@@ -24,27 +42,28 @@
           <span class="more">M</span>
         </div>
       </div>
-    </div> 
+    </div>
     <div class="setting justify-right">
       <div class="duration"><span>00:59 / 03:45</span></div>
       <div class="lyric"><span>Lyric</span></div>
       <div class="playList animated swing"><span>SongList</span></div>
     </div>
-    
   </div>
 </template>
 
 <script>
 import "animate.css";
-import { clearTimeout } from 'timers';
+import { clearTimeout } from "timers";
+//import { getMusicListJson } from "../../musicApi.js";
 export default {
   name: "Header",
+  //...mapMutations(['']),
   data() {
     return {
-      isNextSong:true,
-      isPlayOrPause:false,
-      isPrevSong:false,
-    }  
+      isNextSong: true,
+      isPlayOrPause: false,
+      isPrevSong: false
+    };
   },
   methods: {
     nextSong() {
@@ -52,7 +71,7 @@ export default {
       $this.isNextSong = true;
       let setA = setTimeout(() => {
         $this.isNextSong = false;
-      },1000);
+      }, 1000);
       clearTimeout(setA);
     },
     prevSong() {
@@ -60,7 +79,7 @@ export default {
       $this.isPrevSong = true;
       let setA = setTimeout(() => {
         $this.isPrevSong = false;
-      },1000);
+      }, 1000);
       clearTimeout(setA);
     },
     playOrPause() {
@@ -68,9 +87,12 @@ export default {
       $this.isPlayOrPause = true;
       let setA = setTimeout(() => {
         $this.isPlayOrPause = false;
-      },1000);
+      }, 1000);
       clearTimeout(setA);
     }
+  },
+  mounted() {
+    //let $this = this;
   }
 };
 </script>
@@ -78,8 +100,11 @@ export default {
 <style lang="scss">
 $activeColor: #3385ff;
 #footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
   flex: 0 0 50px;
-  padding: 0 10px;
+  padding: 10px;
   background-color: #ddd;
   color: #333;
   .songInfo {

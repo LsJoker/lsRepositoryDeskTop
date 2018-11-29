@@ -35,21 +35,23 @@ export default {
 </script>
 
 <style lang="scss">
-$activeColor: #3385ff;
+$activeColor: #C20C0C;
+$background:#C20C0C;
 #header {
   flex: 0 0 50px;
   padding: 0 10px;
+  border-bottom: 2px solid #C20C0C;
   // background-color: #c62f2f;
   background-color: #444;
   color: #fff;
   .logo {
     font-size: 16px;   
-    text-shadow: #3385ff 0 0 1px;
+    text-shadow: #C20C0C 0 0 1px;
   }
 }
 .logo:hover {
   cursor:pointer;
-  color: #3385ff;
+  color: #C20C0C;
   background-color: #444;
 }
 .minWrapper {
