@@ -1,6 +1,7 @@
 <template>
   <div id="header" class="align-center drag space-between">
-    <div class="header-l flex"><span class="logo">CloudMusic</span></div>
+    <div class="header-l flex no-drag"><span class="logo">0..0
+      </span></div>
     <div class="header-r flex no-drag">
       <div class="minWrapper align-center" @click="minWindow">
         <span class="appHide"></span>
@@ -34,7 +35,7 @@ export default {
 </script>
 
 <style lang="scss">
-$activeColor: rgb(0, 255, 213);
+$activeColor: #3385ff;
 #header {
   flex: 0 0 50px;
   padding: 0 10px;
@@ -42,8 +43,14 @@ $activeColor: rgb(0, 255, 213);
   background-color: #444;
   color: #fff;
   .logo {
-    font-size: 16px;
+    font-size: 16px;   
+    text-shadow: #3385ff 0 0 1px;
   }
+}
+.logo:hover {
+  cursor:pointer;
+  color: #3385ff;
+  background-color: #444;
 }
 .minWrapper {
   min-width: 26px;

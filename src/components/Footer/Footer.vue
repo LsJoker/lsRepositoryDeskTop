@@ -1,5 +1,10 @@
 <template>
   <div id="footer" class="align-center space-between">
+    <div class="control space-between align-center">
+      <div class="prevWrapper center animated" :class="{ pulse: isPrevSong}" @click="prevSong"><span class="prevBtn"></span></div>
+      <div class="playWrapper center animated" :class="{ pulse: isPlayOrPause}" @click="playOrPause"><span class="playBtn"></span></div>
+      <div class="nextWrapper center animated" :class="{ pulse: isNextSong}" @click="nextSong"><span class="nextBtn"></span></div>
+    </div>
     <div class="songInfo flex">
       <div class="icon align-center">
         <img
@@ -19,28 +24,59 @@
           <span class="more">M</span>
         </div>
       </div>
-    </div>
-    <div class="control space-between align-center">
-      <div class="prevWrapper center"><span class="prevBtn"></span></div>
-      <div class="playWrapper center"><span class="playBtn"></span></div>
-      <div class="nextWrapper center"><span class="nextBtn"></span></div>
-    </div>
+    </div> 
     <div class="setting justify-right">
       <div class="duration"><span>00:59 / 03:45</span></div>
       <div class="lyric"><span>Lyric</span></div>
-      <div class="playList"><span>SongList</span></div>
+      <div class="playList animated swing"><span>SongList</span></div>
     </div>
+    
   </div>
 </template>
 
 <script>
+import "animate.css";
+import { clearTimeout } from 'timers';
 export default {
   name: "Header",
-  methods: {}
+  data() {
+    return {
+      isNextSong:true,
+      isPlayOrPause:false,
+      isPrevSong:false,
+    }  
+  },
+  methods: {
+    nextSong() {
+      let $this = this;
+      $this.isNextSong = true;
+      let setA = setTimeout(() => {
+        $this.isNextSong = false;
+      },1000);
+      clearTimeout(setA);
+    },
+    prevSong() {
+      let $this = this;
+      $this.isPrevSong = true;
+      let setA = setTimeout(() => {
+        $this.isPrevSong = false;
+      },1000);
+      clearTimeout(setA);
+    },
+    playOrPause() {
+      let $this = this;
+      $this.isPlayOrPause = true;
+      let setA = setTimeout(() => {
+        $this.isPlayOrPause = false;
+      },1000);
+      clearTimeout(setA);
+    }
+  }
 };
 </script>
 
 <style lang="scss">
+$activeColor: #3385ff;
 #footer {
   flex: 0 0 50px;
   padding: 0 10px;
@@ -51,16 +87,20 @@ export default {
   }
   .control {
     flex: 0 0 150px;
+    margin-left: 15px;
+    margin-right: 20px;
     .prevWrapper,
     .playWrapper,
     .nextWrapper {
       width: 32px;
       height: 32px;
       border-radius: 50%;
+      border: 2px solid $activeColor;
       background-color: #ccc;
       cursor: pointer;
       &:hover {
         background-color: #bbb;
+        box-shadow: 0px 0px 2.5px 1px $activeColor;
       }
     }
     .playWrapper {
@@ -76,14 +116,14 @@ export default {
         height: 18px;
         border-style: solid;
         border-width: 10px 0 10px 14px;
-        border-color: transparent transparent transparent #111;
+        border-color: transparent transparent transparent $activeColor;
         transition: all 0.3s ease;
       }
       .pauseBtn {
         height: 18px;
         border-style: solid;
         border-width: 0 0 0 14px;
-        border-color: transparent transparent transparent #111;
+        border-color: transparent transparent transparent $activeColor;
         transition: all 0.3s ease;
       }
     }
@@ -97,11 +137,11 @@ export default {
     .prevBtn {
       margin-left: -14px;
       border-left: 10px solid transparent;
-      border-right: 10px solid #111;
+      border-right: 10px solid $activeColor;
     }
     .nextBtn {
       margin-left: 14px;
-      border-left: 10px solid #111;
+      border-left: 10px solid $activeColor;
       border-right: 10px solid transparent;
     }
   }
