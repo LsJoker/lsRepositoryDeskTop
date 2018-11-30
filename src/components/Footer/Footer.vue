@@ -46,7 +46,9 @@
     <div class="setting justify-right">
       <div class="duration"><span>00:59 / 03:45</span></div>
       <div class="lyric"><span>Lyric</span></div>
-      <div class="playList animated swing"><span>SongList</span></div>
+      <div class="playList">
+        <i class="fa fa-list-ul" aria-hidden="true" @click="showPlayList"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -54,6 +56,7 @@
 <script>
 import "animate.css";
 import { clearTimeout } from "timers";
+import { mapMutations, mapState } from "vuex";
 //import { getMusicListJson } from "../../musicApi.js";
 export default {
   name: "Header",
@@ -65,7 +68,11 @@ export default {
       isPrevSong: false
     };
   },
+  computed: {
+    ...mapState(["isShowPlayList"])
+  },
   methods: {
+    ...mapMutations(["changeShowPlayList"]),
     nextSong() {
       let $this = this;
       $this.isNextSong = true;
@@ -89,6 +96,9 @@ export default {
         $this.isPlayOrPause = false;
       }, 1000);
       clearTimeout(setA);
+    },
+    showPlayList() {
+      this.changeShowPlayList(!this.isShowPlayList);
     }
   },
   mounted() {
@@ -177,6 +187,9 @@ $activeColor: #3385ff;
     .playList {
       padding: 4px;
       margin: 0 4px;
+      i:hover {
+        color: #c20c0c;
+      }
     }
     .lyric,
     .playList {

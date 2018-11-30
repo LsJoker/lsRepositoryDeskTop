@@ -3,6 +3,7 @@
     <my-header></my-header>
     <left-menu>123</left-menu>
     <main id="main"><router-view /></main>
+    <play-list :is-show-play-list="isShowPlayList"></play-list>
     <my-footer></my-footer>
   </div>
 </template>
@@ -11,15 +12,25 @@
 import MyHeader from "./components/Header/Header";
 import MyFooter from "./components/Footer/Footer";
 import leftMenu from "./components/LeftMenu/LeftMenu";
+import playList from "./components/PlayList/PlayList";
 import { getMusicListJson } from "./musicApi.js";
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 export default {
   name: "App",
   components: {
     MyHeader,
     MyFooter,
-    leftMenu
+    leftMenu,
+    playList
+  },
+  data() {
+    return {
+      show: true
+    };
+  },
+  computed: {
+    ...mapState(["isShowPlayList"])
   },
   methods: {
     ...mapMutations(["SAVE_userPlayList"])

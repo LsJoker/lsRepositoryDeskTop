@@ -53,10 +53,20 @@
       </div>
       <li class="li-title">创建的歌单</li>
       <div class="li-func">
-        <li class="li-title" v-for="(item, index) in userPlayList" :key="index">
+        <li class="li-title" v-for="(item, index) in ownPlayList" :key="index">
           <i v-if="index === 0" class="fa fa-heart" aria-hidden="true"></i>
           <i v-if="index > 0" class="fa fa-list" aria-hidden="true"></i
           >{{ item.name }}
+        </li>
+      </div>
+      <li class="li-title">收藏的歌单</li>
+      <div class="li-func">
+        <li
+          class="li-title"
+          v-for="(item, index) in collectPlayList"
+          :key="index"
+        >
+          <i class="fa fa-list" aria-hidden="true"></i>{{ item.name }}
         </li>
       </div>
     </div>
@@ -78,13 +88,22 @@ export default {
   },
   computed: {
     ...mapState({
-      userPlayList: "userPlayList"
-    })
-    // ownPlayList () {
-    //   return this.userPlayList.filter(function (item){
-    //     return
-    //   })
-    // }
+      userPlayList: "userPlayList",
+      userInfo: "userInfo"
+    }),
+    ownPlayList() {
+      //console.log(this.userPlayList);
+      let $this = this;
+      return this.userPlayList.filter(function(item) {
+        return item.userId === +$this.userInfo.uid;
+      });
+    },
+    collectPlayList() {
+      let $this = this;
+      return this.userPlayList.filter(function(item) {
+        return item.userId !== +$this.userInfo.uid;
+      });
+    }
   },
   methods: {},
   mounted() {
@@ -124,7 +143,7 @@ $background: #191b1f;
   }
   li {
     list-style: none;
-    width: 200px;
+    width: 168px;
     display: block;
   }
   .li-func {
@@ -139,6 +158,9 @@ $background: #191b1f;
     .li-title {
       color: #adafb2;
       margin-bottom: 10px;
+      overflow: hidden; /*自动隐藏文字*/
+      text-overflow: ellipsis; /*文字隐藏后添加省略号*/
+      white-space: nowrap; /*强制不换行*/
     }
     .li-title:hover {
       color: #dcdde3;
