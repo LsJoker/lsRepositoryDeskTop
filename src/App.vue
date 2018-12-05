@@ -33,15 +33,20 @@ export default {
     ...mapState(["isShowPlayList"])
   },
   methods: {
-    ...mapMutations(["SAVE_userPlayList"])
+    ...mapMutations(["SAVE_userPlayList"]),
+    getMusicList() {
+      getMusicListJson({ uid: "337584617" }).then(res => {
+        let $this = this;
+        if (res.data.code === 200) {
+          $this.SAVE_userPlayList(res.data.playlist);
+        } else {
+          $this.getMusicList();
+        }
+      });
+    }
   },
   mounted() {
-    getMusicListJson({ uid: "337584617" }).then(res => {
-      let $this = this;
-      if (res.data.code === 200) {
-        $this.SAVE_userPlayList(res.data.playlist);
-      }
-    });
+    this.getMusicList();
   }
 };
 </script>
