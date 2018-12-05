@@ -85,9 +85,11 @@ html,
 body,
 #app {
   height: 100%;
+  background: #282a2e;
 }
 #app {
   box-sizing: border-box;
+  font-family: STSong, sans-serif;
   display: flex;
   flex-direction: column;
   font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei",

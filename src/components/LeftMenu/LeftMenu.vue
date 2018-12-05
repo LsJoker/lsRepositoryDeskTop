@@ -53,7 +53,12 @@
       </div>
       <li class="li-title">创建的歌单</li>
       <div class="li-func">
-        <li class="li-title" v-for="(item, index) in ownPlayList" :key="index">
+        <li
+          class="li-title"
+          v-for="(item, index) in ownPlayList"
+          :key="index"
+          @click="openPerPlayList(item.id);"
+        >
           <i v-if="index === 0" class="fa fa-heart" aria-hidden="true"></i>
           <i v-if="index > 0" class="fa fa-list" aria-hidden="true"></i
           >{{ item.name }}
@@ -65,6 +70,7 @@
           class="li-title"
           v-for="(item, index) in collectPlayList"
           :key="index"
+          @click="openPerPlayList(item.id);"
         >
           <i class="fa fa-list" aria-hidden="true"></i>{{ item.name }}
         </li>
@@ -75,7 +81,8 @@
 
 <script>
 import "animate.css";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
+import { getMusicListDetailJson } from "../../musicApi.js";
 export default {
   name: "LeftMenu",
   //...mapMutations(['']),
@@ -105,7 +112,17 @@ export default {
       });
     }
   },
-  methods: {},
+  methods: {
+    ...mapMutations(["SAVE_perPlayListID", "SAVE_perPlayListDetail"]),
+    openPerPlayList(id) {
+      getMusicListDetailJson({ id: id }).then(res => {
+        let $this = this;
+        if (res.data.code === 200) {
+          $this.SAVE_perPlayListDetail(res.data.playlist);
+        }
+      });
+    }
+  },
   mounted() {
     //let $this = this;
   }

@@ -14,7 +14,9 @@ export default new Vuex.Store({
       img: ""
     },
     isShowPlayList: false,
-    userPlayList: []
+    userPlayList: [],
+    perPlayListID: "",
+    perPlayListDetail: []
   },
   mutations: {
     SAVE_userPlayList(state, userPlayList) {
@@ -22,6 +24,12 @@ export default new Vuex.Store({
     },
     changeShowPlayList(state, isShowPlayList) {
       state.isShowPlayList = isShowPlayList;
+    },
+    SAVE_perPlayListID(state, perPlayListID) {
+      state.perPlayListID = perPlayListID;
+    },
+    SAVE_perPlayListDetail(state, perPlayListDetail) {
+      state.perPlayListDetail = perPlayListDetail;
     }
   },
   actions: {}
