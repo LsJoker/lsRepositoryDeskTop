@@ -16,7 +16,8 @@ export default new Vuex.Store({
     isShowPlayList: false,
     userPlayList: [],
     perPlayListID: "",
-    perPlayListDetail: []
+    perPlayListDetail: [],
+    perSongData: {}
   },
   mutations: {
     SAVE_userPlayList(state, userPlayList) {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     },
     SAVE_perPlayListDetail(state, perPlayListDetail) {
       state.perPlayListDetail = perPlayListDetail;
+    },
+    SAVE_perSongData(state, perSongData) {
+      state.perSongData = perSongData;
     }
   },
   actions: {}

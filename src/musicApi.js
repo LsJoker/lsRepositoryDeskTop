@@ -8,3 +8,9 @@ export const getMusicListJson = params => {
 export const getMusicListDetailJson = params => {
   return axios.get(`${baseUrl}/playlist/detail`, { params });
 };
+// export const getCloudMusicListDetailJson = () => {
+//   return axios.get(`${baseUrl}/user/cloud`);
+// };
+export const getMusicUrlJson = params => {
+  return axios.get(`${baseUrl}/song/url`, { params });
+};

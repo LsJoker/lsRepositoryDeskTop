@@ -22,25 +22,57 @@
         </span>
       </div>
     </div>
-    <li
-      class="row"
-      v-for="(item, index) in perPlayListDetail.tracks"
-      :key="index"
-    >
-      {{ item.name }}
-    </li>
+    <div class="playListDiv">
+      <li
+        class="row"
+        v-for="(item, index) in perPlayListDetail.tracks"
+        :key="index"
+      >
+        <span class="col">
+          <span class="musicName" @dblclick="getMusicUrl(item.id);">
+            {{ item.name }}</span
+          ><i v-if="item.mv" class="fa fa-play-circle-o" aria-hidden="true"></i>
+        </span>
+        <span v-if="item.ar.length > 0" class="col-name">
+          {{ item.ar[0].name }}
+        </span>
+        <span v-else class="col-name"> 未知艺人 </span>
+        <span class="col-link">
+          <i class="fa fa-link" aria-hidden="true"></i>
+        </span>
+        <span v-if="item.dt / (1000 * 60) >= 10" class="col-time">
+          {{ Math.floor(item.dt / (1000 * 60)) }}:
+          <span v-if="Math.round((item.dt / 1000) % 60) < 10">0</span
+          >{{ Math.round(item.dt % (1000 * 60)) }}
+        </span>
+        <span v-else class="col-time">
+          0{{ Math.floor(item.dt / (1000 * 60)) }}:
+          <span v-if="Math.round((item.dt / 1000) % 60) < 10">0</span
+          >{{ Math.round((item.dt / 1000) % 60) }}
+        </span>
+      </li>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import { getMusicUrlJson } from "../../musicApi.js";
 export default {
   name: "PlayList",
   props: { isShowPlayList: Boolean },
   computed: {
     ...mapState(["perPlayListDetail"])
   },
-  methods: {},
+  methods: {
+    getMusicUrl(id) {
+      getMusicUrlJson({ id: id }).then(res => {
+        let $this = this;
+        if (res.data.code === 200) {
+        }
+      });
+    }
+  },
   mounted() {
     //console.log(this.isShowPlayList);
   }
@@ -122,12 +154,45 @@ $background: #282a2e;
   .row:nth-of-type(even) {
     background-color: #303236;
   }
+  .playListDiv {
+    width: 100%;
+    height: 400px;
+    overflow-y: auto;
+  }
   .row {
+    line-height: 20px;
     width: 100%;
     padding-left: 20px;
     padding-top: 3px;
     padding-bottom: 3px;
     color: #dcdde4;
+    .fa-play-circle-o {
+      cursor: pointer;
+      color: #c20c0c;
+      margin-left: 5px;
+    }
+    .col-name {
+      display: inline-block;
+      color: #5f5f63;
+      width: 120px;
+    }
+    .col-link {
+      color: #5f5f63;
+    }
+    .col-time {
+      margin-left: 10px;
+      color: #798385;
+    }
+    .col {
+      .musicName {
+        cursor: pointer;
+      }
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 350px;
+    }
   }
 }
 </style>

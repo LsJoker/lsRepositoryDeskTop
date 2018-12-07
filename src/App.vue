@@ -13,7 +13,7 @@ import MyHeader from "./components/Header/Header";
 import MyFooter from "./components/Footer/Footer";
 import leftMenu from "./components/LeftMenu/LeftMenu";
 import playList from "./components/PlayList/PlayList";
-import { getMusicListJson } from "./musicApi.js";
+import { getMusicListJson, getCloudMusicListDetailJson } from "./musicApi.js";
 import { mapMutations, mapState } from "vuex";
 
 export default {
@@ -39,6 +39,7 @@ export default {
         let $this = this;
         if (res.data.code === 200) {
           $this.SAVE_userPlayList(res.data.playlist);
+          //getCloudMusicListDetailJson();
         } else {
           $this.getMusicList();
         }

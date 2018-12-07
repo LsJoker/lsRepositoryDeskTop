@@ -49,6 +49,7 @@
       <div class="playList">
         <i class="fa fa-list-ul" aria-hidden="true" @click="showPlayList"></i>
       </div>
+      <audio src=""></audio>
     </div>
   </div>
 </template>
@@ -108,15 +109,15 @@ export default {
 </script>
 
 <style lang="scss">
-$activeColor: #3385ff;
+$activeColor: #b82525;
 #footer {
   position: fixed;
   width: 100%;
   bottom: 0px;
   flex: 0 0 50px;
   padding: 10px;
-  background-color: #ddd;
-  color: #333;
+  background-color: #222225;
+  color: #7a7a7c;
   .songInfo {
     flex: 1 0 200px;
   }
@@ -131,10 +132,9 @@ $activeColor: #3385ff;
       height: 32px;
       border-radius: 50%;
       border: 2px solid $activeColor;
-      background-color: #ccc;
+      background-color: #222225;
       cursor: pointer;
       &:hover {
-        background-color: #bbb;
         box-shadow: 0px 0px 2.5px 1px $activeColor;
       }
     }
