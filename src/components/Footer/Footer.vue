@@ -35,7 +35,8 @@
       </div>
       <div class="flex-column" style="padding:0 10px;">
         <div class="name">
-          <span>TestName</span> &nbsp;<span>-</span>&nbsp; <span>A artist</span>
+          <span>{{ songData.perSongData.name || "" }}</span>
+          &nbsp;<span>-</span>&nbsp; <span>A artist</span>
         </div>
         <div class="func flex">
           <span class="love">L</span> <span class="download">D</span>
@@ -49,7 +50,7 @@
       <div class="playList">
         <i class="fa fa-list-ul" aria-hidden="true" @click="showPlayList"></i>
       </div>
-      <audio src=""></audio>
+      <audio :src="songData.urlData[0].url"></audio>
     </div>
   </div>
 </template>
@@ -66,11 +67,23 @@ export default {
     return {
       isNextSong: true,
       isPlayOrPause: false,
-      isPrevSong: false
+      isPrevSong: false,
+      songData: {}
     };
   },
   computed: {
-    ...mapState(["isShowPlayList"])
+    ...mapState(["isShowPlayList", "perSongData"])
+  },
+  watch: {
+    perSongData: function(val) {
+      console.log(val);
+      console.log(this);
+      if (val) {
+        this.songData = val;
+      } else {
+        alert("未获取到该歌曲数据");
+      }
+    }
   },
   methods: {
     ...mapMutations(["changeShowPlayList"]),

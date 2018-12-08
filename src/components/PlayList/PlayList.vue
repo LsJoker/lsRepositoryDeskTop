@@ -29,7 +29,7 @@
         :key="index"
       >
         <span class="col">
-          <span class="musicName" @dblclick="getMusicUrl(item.id);">
+          <span class="musicName" @dblclick="getMusicUrl(item.id, item);">
             {{ item.name }}</span
           ><i v-if="item.mv" class="fa fa-play-circle-o" aria-hidden="true"></i>
         </span>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { getMusicUrlJson } from "../../musicApi.js";
 export default {
   name: "PlayList",
@@ -65,10 +65,17 @@ export default {
     ...mapState(["perPlayListDetail"])
   },
   methods: {
-    getMusicUrl(id) {
+    ...mapMutations(["SAVE_perSongData"]),
+    getMusicUrl(id, perSongData) {
       getMusicUrlJson({ id: id }).then(res => {
         let $this = this;
         if (res.data.code === 200) {
+          let playSongdata = {
+            urlData: res.data.data,
+            perSongData: perSongData
+          };
+          //console.log(playSongdata);
+          $this.SAVE_perSongData(playSongdata);
         }
       });
     }
