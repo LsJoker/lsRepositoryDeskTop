@@ -13,7 +13,7 @@
         :class="{ pulse: isPlayOrPause }"
         @click="playOrPause"
       >
-        <span class="playBtn"></span>
+        <span class="playBtn " :class="{ playingBtn: isPlayOrPause }"></span>
       </div>
       <div
         class="nextWrapper center animated"
@@ -101,7 +101,8 @@
 import "animate.css";
 import { clearTimeout } from "timers";
 import { mapMutations, mapState } from "vuex";
-//import { getMusicListJson } from "../../musicApi.js";
+import { _Tool } from "../../tool.js";
+import { getMusicUrlJson } from "../../musicApi.js";
 export default {
   name: "Header",
   //...mapMutations(['']),
@@ -115,7 +116,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(["isShowPlayList", "perSongData", "playFlag"])
+    ...mapState([
+      "isShowPlayList",
+      "perSongData",
+      "playFlag",
+      "perPlayListDetail",
+      "audio"
+    ])
   },
   watch: {
     perSongData: function(val) {
@@ -132,11 +139,17 @@ export default {
       console.log(val);
       if (val === true) {
         $this.play();
+      } else {
+        $this.pause();
       }
     }
   },
   methods: {
-    ...mapMutations(["changeShowPlayList"]),
+    ...mapMutations([
+      "changeShowPlayList",
+      "SAVE_perSongData",
+      "SAVE_playFlag"
+    ]),
     //下一首
     nextSong() {
       let $this = this;
@@ -158,19 +171,53 @@ export default {
     //播放或者暂停
     playOrPause() {
       let $this = this;
-      $this.isPlayOrPause = true;
-      let setA = setTimeout(() => {
-        $this.isPlayOrPause = false;
-      }, 1000);
-      clearTimeout(setA);
+      //if ()
+      $this.isPlayOrPause = !$this.isPlayOrPause;
+      if ($this.isPlayOrPause) {
+        $this.play();
+      } else {
+        $this.pause();
+      }
     },
     //展示播放列表
     showPlayList() {
       this.changeShowPlayList(!this.isShowPlayList);
     },
+    //暂停事件
+    pause() {
+      let $this = this;
+      $this.$refs.audioTag.pause();
+    },
     //播放事件
     play() {
       let $this = this;
+      //取消则继续播放
+      if ($this.$refs.audioTag.paused) {
+        $this.$refs.audioTag.play();
+        return;
+      }
+      //直接点击播放则播放当前列表的第一首
+      if (
+        $this.perPlayListDetail &&
+        $this.perPlayListDetail.tracks.length > 0 &&
+        !$this.audio.url
+      ) {
+        let perSongData = $this.perPlayListDetail.tracks[0];
+        let id = $this.perPlayListDetail.tracks[0].id;
+        getMusicUrlJson({ id: id }).then(res => {
+          let $this = this;
+          if (res.data.code === 200) {
+            let playSongdata = {
+              urlData: res.data.data,
+              perSongData: perSongData
+            };
+            //console.log(playSongdata);
+            $this.SAVE_perSongData(playSongdata);
+            $this.SAVE_playFlag(true);
+          }
+        });
+      }
+      //播放
       $this.$refs.audioTag.oncanplay = function() {
         this.play();
         $this.updateTimeShow();
@@ -180,18 +227,8 @@ export default {
     updateTimeShow() {
       let $this = this;
       $this.$refs.audioTag.ontimeupdate = function() {
-        $this.current = this.currentTime;
+        $this.current = _Tool.fomatTime(this.currentTime);
       };
-      // $this.$watch(
-      //   "$refs.audioTag",
-      //   val => {
-      //     if (val.currentTime < 10) {
-      //       $this.duration = "00:0" + val.currentTime;
-      //     }
-      //     // $this.duration
-      //   },
-      //   { deep: true }
-      // );
     }
   },
   mounted() {
@@ -245,6 +282,10 @@ $activeColor: #b82525;
         border-width: 10px 0 10px 14px;
         border-color: transparent transparent transparent $activeColor;
         transition: all 0.3s ease;
+      }
+      .playingBtn {
+        border-style: double;
+        border-width: 0 0 0 14px;
       }
       .pauseBtn {
         height: 18px;

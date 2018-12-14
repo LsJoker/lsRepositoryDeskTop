@@ -1,16 +1,17 @@
-import axios from "axios";
+export const _Tool = {
+  // 格式化播放时间
+  fomatTime(time) {
+    let timeTotalSecond = Math.ceil(time);
+    let timeMine = Math.floor(timeTotalSecond / 60);
+    let timesecond = timeTotalSecond % 60;
 
-let baseUrl = "https://bighua.wang:3000";
+    if (timeMine < 10) {
+      timeMine = "0" + timeMine;
+    }
+    if (timesecond < 10) {
+      timesecond = "0" + timesecond;
+    }
 
-export const getMusicListJson = params => {
-  return axios.get(`${baseUrl}/user/playlist`, { params });
-};
-export const getMusicListDetailJson = params => {
-  return axios.get(`${baseUrl}/playlist/detail`, { params });
-};
-// export const getCloudMusicListDetailJson = () => {
-//   return axios.get(`${baseUrl}/user/cloud`);
-// };
-export const getMusicUrlJson = params => {
-  return axios.get(`${baseUrl}/song/url`, { params });
+    return timeMine + ":" + timesecond;
+  }
 };
