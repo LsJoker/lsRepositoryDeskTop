@@ -65,8 +65,10 @@ export default {
     ...mapState(["perPlayListDetail"])
   },
   methods: {
-    ...mapMutations(["SAVE_perSongData"]),
+    ...mapMutations(["SAVE_perSongData", "SAVE_playFlag"]),
     getMusicUrl(id, perSongData) {
+      let playFlag = false;
+      this.SAVE_playFlag(playFlag);
       getMusicUrlJson({ id: id }).then(res => {
         let $this = this;
         if (res.data.code === 200) {
@@ -75,7 +77,9 @@ export default {
             perSongData: perSongData
           };
           //console.log(playSongdata);
+          playFlag = true;
           $this.SAVE_perSongData(playSongdata);
+          $this.SAVE_playFlag(playFlag);
         }
       });
     }

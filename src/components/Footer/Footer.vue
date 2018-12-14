@@ -26,7 +26,11 @@
     <div class="songInfo flex">
       <div class="icon align-center">
         <img
-          src="../../assets/logo.png"
+          :src="
+            songData.perSongData &&
+              songData.perSongData.al &&
+              songData.perSongData.al.picUrl
+          "
           width="40"
           height="40"
           alt=""
@@ -35,22 +39,60 @@
       </div>
       <div class="flex-column" style="padding:0 10px;">
         <div class="name">
-          <span>{{ songData.perSongData.name || "" }}</span>
-          &nbsp;<span>-</span>&nbsp; <span>A artist</span>
+          <span>{{
+            (songData.perSongData && songData.perSongData.name) || ""
+          }}</span>
+          &nbsp;<span>-</span>&nbsp;
+          <span>{{
+            (songData.perSongData &&
+              songData.perSongData.ar &&
+              songData.perSongData.ar[0].name) ||
+              "未知"
+          }}</span>
         </div>
         <div class="func flex">
-          <span class="love">L</span> <span class="download">D</span>
-          <span class="more">M</span>
+          <span class="love">{{
+            songData.perSongData &&
+              songData.perSongData.al &&
+              songData.perSongData.al.name
+          }}</span>
         </div>
       </div>
     </div>
     <div class="setting justify-right">
-      <div class="duration"><span>00:59 / 03:45</span></div>
+      <div class="duration">
+        <span
+          >{{ current }} /
+          <span v-if="songData.perSongData && songData.perSongData.dt">
+            <span
+              v-if="songData.perSongData.dt / (1000 * 60) >= 10"
+              class="col-time"
+            >
+              {{ Math.floor(songData.perSongData.dt / (1000 * 60)) }}:
+              <span
+                v-if="Math.round((songData.perSongData.dt / 1000) % 60) < 10"
+                >0</span
+              >{{ Math.round(songData.perSongData.dt % (1000 * 60)) }}
+            </span>
+            <span v-else class="col-time">
+              0{{ Math.floor(songData.perSongData.dt / (1000 * 60)) }}:
+              <span
+                v-if="Math.round((songData.perSongData.dt / 1000) % 60) < 10"
+                >0</span
+              >{{ Math.round((songData.perSongData.dt / 1000) % 60) }}
+            </span></span
+          >
+          <span v-else> 00:00 </span>
+        </span>
+      </div>
       <div class="lyric"><span>Lyric</span></div>
       <div class="playList">
         <i class="fa fa-list-ul" aria-hidden="true" @click="showPlayList"></i>
       </div>
-      <audio :src="songData.urlData[0].url"></audio>
+      <audio
+        ref="audioTag"
+        :src="songData && songData.urlData && songData.urlData[0].url"
+      ></audio>
     </div>
   </div>
 </template>
@@ -68,11 +110,12 @@ export default {
       isNextSong: true,
       isPlayOrPause: false,
       isPrevSong: false,
-      songData: {}
+      songData: {},
+      current: "00:00"
     };
   },
   computed: {
-    ...mapState(["isShowPlayList", "perSongData"])
+    ...mapState(["isShowPlayList", "perSongData", "playFlag"])
   },
   watch: {
     perSongData: function(val) {
@@ -83,10 +126,18 @@ export default {
       } else {
         alert("未获取到该歌曲数据");
       }
+    },
+    playFlag: function(val) {
+      let $this = this;
+      console.log(val);
+      if (val === true) {
+        $this.play();
+      }
     }
   },
   methods: {
     ...mapMutations(["changeShowPlayList"]),
+    //下一首
     nextSong() {
       let $this = this;
       $this.isNextSong = true;
@@ -95,6 +146,7 @@ export default {
       }, 1000);
       clearTimeout(setA);
     },
+    //前一首
     prevSong() {
       let $this = this;
       $this.isPrevSong = true;
@@ -103,6 +155,7 @@ export default {
       }, 1000);
       clearTimeout(setA);
     },
+    //播放或者暂停
     playOrPause() {
       let $this = this;
       $this.isPlayOrPause = true;
@@ -111,8 +164,34 @@ export default {
       }, 1000);
       clearTimeout(setA);
     },
+    //展示播放列表
     showPlayList() {
       this.changeShowPlayList(!this.isShowPlayList);
+    },
+    //播放事件
+    play() {
+      let $this = this;
+      $this.$refs.audioTag.oncanplay = function() {
+        this.play();
+        $this.updateTimeShow();
+      };
+    },
+    //更新显示播放时间
+    updateTimeShow() {
+      let $this = this;
+      $this.$refs.audioTag.ontimeupdate = function() {
+        $this.current = this.currentTime;
+      };
+      // $this.$watch(
+      //   "$refs.audioTag",
+      //   val => {
+      //     if (val.currentTime < 10) {
+      //       $this.duration = "00:0" + val.currentTime;
+      //     }
+      //     // $this.duration
+      //   },
+      //   { deep: true }
+      // );
     }
   },
   mounted() {
