@@ -101,6 +101,7 @@
 import "animate.css";
 import { clearTimeout } from "timers";
 import { mapMutations, mapState } from "vuex";
+import { _Tool } from "../../tool.js";
 //import { getMusicListJson } from "../../musicApi.js";
 export default {
   name: "Header",
@@ -180,18 +181,13 @@ export default {
     updateTimeShow() {
       let $this = this;
       $this.$refs.audioTag.ontimeupdate = function() {
-        $this.current = this.currentTime;
+        let currentTime = parseInt(this.currentTime);
+        $this.current = fomatTime(time);
+        if (currentTime < 10) {
+          $this.current = "00:0" + this.currentTime;
+        } else if (currentTime >= 10 && currentTime < 60)
+          $this.current = this.currentTime;
       };
-      // $this.$watch(
-      //   "$refs.audioTag",
-      //   val => {
-      //     if (val.currentTime < 10) {
-      //       $this.duration = "00:0" + val.currentTime;
-      //     }
-      //     // $this.duration
-      //   },
-      //   { deep: true }
-      // );
     }
   },
   mounted() {
