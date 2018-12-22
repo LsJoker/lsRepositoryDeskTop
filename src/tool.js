@@ -1,5 +1,4 @@
 export const _Tool = {
-  // 格式化播放时间
   fomatTime(time) {
     let timeTotalSecond = Math.ceil(time);
     let timeMine = Math.floor(timeTotalSecond / 60);
