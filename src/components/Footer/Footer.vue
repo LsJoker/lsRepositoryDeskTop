@@ -113,7 +113,8 @@ export default {
       isPlayOrPause: false,
       isPrevSong: false,
       songData: {},
-      current: "00:00"
+      current: "00:00",
+      firstPlayFlag: true
     };
   },
   computed: {
@@ -127,8 +128,8 @@ export default {
   },
   watch: {
     perSongData: function(val) {
-      console.log(val);
-      console.log(this);
+      //console.log(val);
+      //console.log(this);
       if (val) {
         this.songData = val;
       } else {
@@ -155,6 +156,35 @@ export default {
     nextSong() {
       let $this = this;
       $this.isNextSong = true;
+      if ($this.perSongData.urlData.length > 0 && $this.firstPlayFlag) {
+        $this.play();
+        return;
+      }
+      let nextSongId;
+      let perSongData;
+      for (var i = 0; i < $this.perPlayListDetail.tracks.length; i++) {
+        if (
+          $this.perSongData.perSongData.id ===
+          $this.perPlayListDetail.tracks[i].id
+        ) {
+          nextSongId = $this.perPlayListDetail.tracks[i + 1].id;
+          perSongData = $this.perPlayListDetail.tracks[i + 1];
+        }
+      }
+      //console.log(nextSongId);
+
+      getMusicUrlJson({ id: nextSongId }).then(res => {
+        let $this = this;
+        if (res.data.code === 200) {
+          let playSongdata = {
+            urlData: res.data.data,
+            perSongData: perSongData
+          };
+          //console.log(playSongdata);
+          $this.SAVE_perSongData(playSongdata);
+          $this.SAVE_playFlag(true);
+        }
+      });
       let setA = setTimeout(() => {
         $this.isNextSong = false;
       }, 1000);
@@ -192,8 +222,8 @@ export default {
     //播放事件
     play() {
       let $this = this;
-      //取消则继续播放
-      if ($this.$refs.audioTag.paused) {
+      //取消则继续播放 多判断一次是否是应用第一次播放
+      if ($this.$refs.audioTag.paused && !$this.firstPlayFlag) {
         $this.$refs.audioTag.play();
         return;
       }
@@ -203,6 +233,7 @@ export default {
         $this.perPlayListDetail.tracks.length > 0 &&
         !$this.audio.url
       ) {
+        $this.firstPlayFlag = false;
         let perSongData = $this.perPlayListDetail.tracks[0];
         let id = $this.perPlayListDetail.tracks[0].id;
         getMusicUrlJson({ id: id }).then(res => {
@@ -220,6 +251,7 @@ export default {
       }
       //播放
       $this.$refs.audioTag.oncanplay = function() {
+        $this.firstPlayFlag = false;
         this.play();
         $this.updateTimeShow();
       };
