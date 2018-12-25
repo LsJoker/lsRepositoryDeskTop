@@ -6,6 +6,9 @@ import {
 } from "vue-cli-plugin-electron-builder/lib";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
+const electron = require("electron");
+const Tray = electron.Tray;
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
@@ -40,7 +43,7 @@ function createWindow() {
   });
   //小化
   ipcMain.on("hide-window", () => {
-    win.minimize();
+    //win.minimize();
   });
   //切换窗口大小
   ipcMain.on("toggle-window", () => {
@@ -83,7 +86,7 @@ app.on("activate", () => {
 app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
-    await installVueDevtools();
+    //await installVueDevtools();
   }
   createWindow();
 });

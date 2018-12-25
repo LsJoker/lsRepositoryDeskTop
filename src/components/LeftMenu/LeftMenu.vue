@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import "animate.css";
+//import "animate.css";
 import { mapState, mapMutations } from "vuex";
 import { getMusicListDetailJson } from "../../musicApi.js";
 export default {

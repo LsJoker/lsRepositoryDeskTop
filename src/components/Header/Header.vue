@@ -1,6 +1,6 @@
 <template>
   <div id="header" class="align-center drag space-between">
-    <div class="header-l flex no-drag"><span class="logo">0..0</span></div>
+    <div class="header-l flex no-drag"><span class="logo">J0keR</span></div>
     <div class="header-r flex no-drag">
       <div class="minWrapper align-center" @click="minWindow">
         <span class="appHide"></span>

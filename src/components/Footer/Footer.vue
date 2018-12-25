@@ -86,8 +86,8 @@
         </span>
       </div>
       <div class="lyric"><span>Lyric</span></div>
-      <div class="playList">
-        <i class="fa fa-list-ul" aria-hidden="true" @click="showPlayList"></i>
+      <div class="playList" @click="showPlayList">
+        playList <i class="fa fa-list-ul" aria-hidden="true"></i>
       </div>
       <audio
         ref="audioTag"
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import "animate.css";
+//import "animate.css";
 import { clearTimeout } from "timers";
 import { mapMutations, mapState } from "vuex";
 import { _Tool } from "../../tool.js";
@@ -205,9 +205,9 @@ export default {
       //if ()
       $this.isPlayOrPause = !$this.isPlayOrPause;
       if ($this.isPlayOrPause) {
-        $this.play();
+        $this.play(true);
       } else {
-        $this.pause();
+        $this.pause(false);
       }
     },
     //展示播放列表
@@ -220,18 +220,20 @@ export default {
       $this.$refs.audioTag.pause();
     },
     //播放事件
-    play() {
+    play(isPaused) {
       let $this = this;
+      //跟新播放按钮的显示
+      $this.isPlayOrPause = true;
       //取消则继续播放 多判断一次是否是应用第一次播放
-      if ($this.$refs.audioTag.paused && !$this.firstPlayFlag) {
+      if ($this.$refs.audioTag.paused && !$this.firstPlayFlag && isPaused) {
         $this.$refs.audioTag.play();
         return;
       }
-      //直接点击播放则播放当前列表的第一首
+      //直接点击播放则播放当前列表的第一首;
       if (
         $this.perPlayListDetail &&
         $this.perPlayListDetail.tracks.length > 0 &&
-        !$this.audio.url
+        !$this.songData.urlData[0].url
       ) {
         $this.firstPlayFlag = false;
         let perSongData = $this.perPlayListDetail.tracks[0];
