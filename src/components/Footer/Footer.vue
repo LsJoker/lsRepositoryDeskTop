@@ -185,19 +185,40 @@ export default {
           $this.SAVE_playFlag(true);
         }
       });
-      let setA = setTimeout(() => {
-        $this.isNextSong = false;
-      }, 1000);
-      clearTimeout(setA);
     },
     //前一首
     prevSong() {
       let $this = this;
       $this.isPrevSong = true;
-      let setA = setTimeout(() => {
-        $this.isPrevSong = false;
-      }, 1000);
-      clearTimeout(setA);
+      if ($this.perSongData.urlData.length > 0 && $this.firstPlayFlag) {
+        $this.play();
+        return;
+      }
+      let prevSongId;
+      let perSongData;
+      for (var i = 0; i < $this.perPlayListDetail.tracks.length; i++) {
+        if (
+          $this.perSongData.perSongData.id ===
+          $this.perPlayListDetail.tracks[i].id
+        ) {
+          prevSongId = $this.perPlayListDetail.tracks[i - 1].id;
+          perSongData = $this.perPlayListDetail.tracks[i - 1];
+        }
+      }
+      //console.log(nextSongId);
+
+      getMusicUrlJson({ id: prevSongId }).then(res => {
+        let $this = this;
+        if (res.data.code === 200) {
+          let playSongdata = {
+            urlData: res.data.data,
+            perSongData: perSongData
+          };
+          //console.log(playSongdata);
+          $this.SAVE_perSongData(playSongdata);
+          $this.SAVE_playFlag(true);
+        }
+      });
     },
     //播放或者暂停
     playOrPause() {

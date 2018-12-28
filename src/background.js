@@ -4,11 +4,12 @@ import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
+import path from "path";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 const electron = require("electron");
 const Tray = electron.Tray;
-
+const Menu = electron.Menu;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
@@ -39,11 +40,12 @@ function createWindow() {
   }
   //退出
   ipcMain.on("window-all-closed", () => {
-    app.quit();
+    win.hide();
+    //app.quit();
   });
   //小化
   ipcMain.on("hide-window", () => {
-    //win.minimize();
+    win.minimize();
   });
   //切换窗口大小
   ipcMain.on("toggle-window", () => {
@@ -89,6 +91,52 @@ app.on("ready", async () => {
     //await installVueDevtools();
   }
   createWindow();
+  /* eslint-disable no-undef */
+  let tray = new Tray(path.join(__static, "msic.ico"));
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: "主界面",
+      click() {
+        win.show();
+      }
+    },
+    {
+      label: "播放/暂停",
+      click() {
+        win.webContents.send("control", "playToggle");
+      }
+    },
+    {
+      label: "上一首",
+      click() {
+        win.webContents.send("control", "playPrevSong");
+      }
+    },
+    {
+      label: "下一首",
+      click() {
+        win.webContents.send("control", "playNextSong");
+      }
+    },
+    {
+      label: "关于",
+      click() {
+        shell.openExternal("https://github.com/MeedFine/ElectronMusic");
+      }
+    },
+    {
+      label: "退出",
+      click() {
+        app.quit();
+      }
+    }
+  ]);
+  tray.setToolTip("Cloud Music");
+  tray.setContextMenu(contextMenu);
+  tray.on("click", () => {
+    win.show();
+    win.setSkipTaskbar(false);
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.
