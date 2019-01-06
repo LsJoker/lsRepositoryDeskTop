@@ -85,7 +85,8 @@
           <span v-else> 00:00 </span>
         </span>
       </div>
-      <div class="lyric"><span>Lyric</span></div>
+      <div class="lyric"><span>+</span></div>
+      <div class="lyric"><span>-</span></div>
       <div class="playList" @click="showPlayList">
         playList <i class="fa fa-list-ul" aria-hidden="true"></i>
       </div>
@@ -138,7 +139,7 @@ export default {
     },
     playFlag: function(val) {
       let $this = this;
-      console.log(val);
+      //console.log(val);
       if (val === true) {
         $this.play();
       } else {
@@ -260,7 +261,6 @@ export default {
         let perSongData = $this.perPlayListDetail.tracks[0];
         let id = $this.perPlayListDetail.tracks[0].id;
         getMusicUrlJson({ id: id }).then(res => {
-          let $this = this;
           if (res.data.code === 200) {
             let playSongdata = {
               urlData: res.data.data,
@@ -277,6 +277,34 @@ export default {
         $this.firstPlayFlag = false;
         this.play();
         $this.updateTimeShow();
+      };
+      //播放结束就下一曲
+      $this.$refs.audioTag.onended = function() {
+        let currentSongId = $this.perSongData.perSongData.id;
+        let perSongData;
+        for (var i = 0; i < $this.perPlayListDetail.tracks.length; i++) {
+          if (currentSongId === $this.perPlayListDetail.tracks[i].id) {
+            if (i === $this.perPlayListDetail.tracks.length - 1) {
+              currentSongId = $this.perPlayListDetail.tracks[0].id;
+              perSongData = $this.perPlayListDetail.tracks[0];
+            } else {
+              currentSongId = $this.perPlayListDetail.tracks[i + 1].id;
+              perSongData = $this.perPlayListDetail.tracks[i + 1];
+            }
+            break;
+          }
+        }
+        getMusicUrlJson({ id: currentSongId }).then(res => {
+          if (res.data.code === 200) {
+            let playSongdata = {
+              urlData: res.data.data,
+              perSongData: perSongData
+            };
+            //console.log(playSongdata);
+            $this.SAVE_perSongData(playSongdata);
+            $this.SAVE_playFlag(true);
+          }
+        });
       };
     },
     //更新显示播放时间
